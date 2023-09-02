@@ -6,17 +6,10 @@ namespace Parbad.Gateway.Vandar
     public class VandarGatewayOptions
     {
         public string ApiTokenGenerationUrl { get; set; } = "https://ipg.vandar.io/api/v3/send";
-
         public string PaymentPageUrl { get; set; } = "https://ipg.vandar.io/v3/";
 
-        public string ApiCheckPaymentUrl { get; set; } =
-            "https://fcp.shaparak.ir/ref-payment/RestServices/mts/inquiryMerchantToken";
-
-        public string ApiVerificationUrl { get; set; } =
-            "https://fcp.shaparak.ir/ref-payment/RestServices/mts/verifyMerchantTrans";
-
-        public string ApiRefundUrl { get; set; } =
-            "https://fcp.shaparak.ir/ref-payment/RestServices/mts/reverseMerchantTrans";
+        public string ApiCheckPaymentUrl { get; set; } = "https://ipg.vandar.io/api/v3/transaction";
+        public string ApiVerificationUrl { get; set; } = "https://ipg.vandar.io/api/v3/verify";
 
         public string ApiKey { get; set; }
     }
