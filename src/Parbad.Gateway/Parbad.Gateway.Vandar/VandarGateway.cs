@@ -68,12 +68,6 @@ public class VandarGateway : GatewayBase<VandarGatewayAccount>
             cancellationToken);
 
         var data = VandarHelper.CreateFetchData(callbackResult, account);
-        var jsonSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = {new StringEnumConverter()}
-        };
-
         var responseMessage =
             await _httpClient.PostJsonAsync<VandarFetchDataResultModel>(_gatewayOptions.ApiCheckPaymentUrl, data,
                 cancellationToken);

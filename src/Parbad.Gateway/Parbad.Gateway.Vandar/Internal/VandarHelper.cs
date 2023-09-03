@@ -1,3 +1,6 @@
+using System;
+using System.Drawing;
+using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Parbad.Abstraction;
@@ -20,9 +23,10 @@ internal static class VandarHelper
             api_key = account.ApiKey,
             callback_url = invoice.CallbackUrl,
             FactorNumber = invoice.TrackingNumber.ToString(),
-            Mobile_Number = "",
-            National_Code = "",
-            Valid_Card_Number = new List<string>()
+            Mobile_Number = invoice.Properties.SingleOrDefault(x => x.Key == "mobile_number").Value.ToString(),
+            National_Code = invoice.Properties.SingleOrDefault(x => x.Key == "national_code").Value.ToString(),
+            Valid_Card_Number = JsonConvert.DeserializeObject<List<string>>(invoice.Properties
+                .SingleOrDefault(x => x.Key == "valid_card_number").Value.ToString() ?? "")
         };
     }
 
@@ -50,7 +54,8 @@ internal static class VandarHelper
         CancellationToken cancellationToken)
     {
         var paymentToken = await request.TryGetParamAsAsync<string>("paymentToken", cancellationToken);
-
+        var status = await request.TryGetParamAsAsync<string>("payment_status", cancellationToken);
+        var token = request.TryGetParamAsAsync<string>("token", cancellationToken).Result;
         if (paymentToken.Value != context.Payment.Token.ToString())
         {
             return new VandarCallbackResultModel
@@ -60,11 +65,10 @@ internal static class VandarHelper
             };
         }
 
-        var status = await request.TryGetParamAsAsync<bool>("payment_status", cancellationToken);
-        var token = request.TryGetParamAsAsync<string>("token", cancellationToken).Result;
+
         return new VandarCallbackResultModel
         {
-            IsSucceed = status.Value,
+            IsSucceed = status.Value.Equals("ok", StringComparison.InvariantCultureIgnoreCase),
             Token = token.Value
         };
     }
@@ -95,7 +99,7 @@ internal static class VandarHelper
     public static IPaymentVerifyResult CreateVerifyResult(VandarVerifyResultModel response, InvoiceContext context,
         VandarCallbackResultModel callbackResult, MessagesOptions optionsMessages)
     {
-        return new PaymentVerifyResult
+        var result = new PaymentVerifyResult
         {
             IsSucceed = response.Status,
             Message = response.Message,
@@ -103,8 +107,11 @@ internal static class VandarHelper
             Status = response.Status ? PaymentVerifyResultStatus.Succeed : PaymentVerifyResultStatus.Failed,
             TrackingNumber = long.Parse(response.FactorNumber),
             AdditionalData = { },
-            GatewayName = "Vandar"
+            GatewayName = "Vandar",
+            TransactionCode = response.TransId.ToString()
         };
+        result.AdditionalData.Add("verifyResponse", response);
+        return result;
     }
 
     public static VandarFetchDataModel CreateFetchData(VandarCallbackResultModel callbackResult,

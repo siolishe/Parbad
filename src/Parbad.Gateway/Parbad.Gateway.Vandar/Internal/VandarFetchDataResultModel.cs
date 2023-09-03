@@ -3,12 +3,12 @@ namespace Parbad.Gateway.Vandar.Internal;
 public class VandarFetchDataResultModel
 {
     public bool Status { get; set; }
-    public string Amount { get; set; }
+    public decimal Amount { get; set; }
     public long TransId { get; set; }
     public string Refnumber { get; set; }
     public string TrackingCode { get; set; }
-    public object FactorNumber { get; set; }
-    public object Mobile { get; set; }
+    public string FactorNumber { get; set; }
+    public string Mobile { get; set; }
     public string Description { get; set; }
     public string CardNumber { get; set; }
     public string CID { get; set; }
