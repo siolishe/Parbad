@@ -47,10 +47,12 @@ namespace Parbad.Storage.EntityFrameworkCore.Configuration
 
             builder.Property(entity => entity.Message)
                 .HasColumnName(nameof(TransactionEntity.Message).ToLower())
+                .HasMaxLength(1000)
                 .IsRequired(required: false);
 
             builder.Property(entity => entity.AdditionalData)
                 .HasColumnName("additional_data")
+                .HasMaxLength(4000)
                 .IsRequired(required: false);
 
             builder.Property(entity => entity.CreatedOn)

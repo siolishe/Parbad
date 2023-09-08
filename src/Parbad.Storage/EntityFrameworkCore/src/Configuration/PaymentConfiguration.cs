@@ -49,6 +49,7 @@ namespace Parbad.Storage.EntityFrameworkCore.Configuration
 
             builder.Property(entity => entity.TransactionCode)
                 .HasColumnName("transaction_code")
+                .HasMaxLength(200)
                 .IsRequired(required: false);
 
             builder.Property(entity => entity.GatewayName)
@@ -66,6 +67,7 @@ namespace Parbad.Storage.EntityFrameworkCore.Configuration
 
             builder.Property(entity => entity.GatewayAccountName)
                 .HasColumnName("gateway_account_name")
+                .HasMaxLength(100)
                 .IsRequired(required: false);
 
             builder.Property(entity => entity.CreatedOn)

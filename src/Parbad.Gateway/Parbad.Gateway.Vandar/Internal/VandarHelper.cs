@@ -18,14 +18,14 @@ internal static class VandarHelper
         return new VandarRequestModel
         {
             amount = (int) invoice.Amount,
-            Description = "",
-            Port = "",
+            description = "",
+            port = "",
             api_key = account.ApiKey,
             callback_url = invoice.CallbackUrl,
-            FactorNumber = invoice.TrackingNumber.ToString(),
-            Mobile_Number = invoice.Properties.SingleOrDefault(x => x.Key == "mobile_number").Value.ToString(),
-            National_Code = invoice.Properties.SingleOrDefault(x => x.Key == "national_code").Value.ToString(),
-            Valid_Card_Number = JsonConvert.DeserializeObject<List<string>>(invoice.Properties
+            factorNumber = invoice.TrackingNumber.ToString(),
+            mobile_number = invoice.Properties.SingleOrDefault(x => x.Key == "mobile_number").Value?.ToString(),
+            national_code = invoice.Properties.SingleOrDefault(x => x.Key == "national_code").Value?.ToString(),
+            valid_card_number = JsonConvert.DeserializeObject<List<string>>(invoice.Properties
                 .SingleOrDefault(x => x.Key == "valid_card_number").Value.ToString() ?? "")
         };
     }

@@ -18,8 +18,8 @@ namespace Parbad.Gateway.Vandar
 
             return builder
                 .AddGateway<VandarGateway>()
-                .WithHttpClient(clientBuilder => { })
-                .WithOptions(options => { });
+                .WithHttpClient(_ => { })
+                .WithOptions(_ => { });
         }
 
         /// <summary>
